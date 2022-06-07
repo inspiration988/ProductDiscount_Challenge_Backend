@@ -8,7 +8,7 @@ class DiscountManager {
     const Defualt_Currency = "EUR";
 
     public $product;
-    public $category;
+   
 
     protected array $_rules = [];
 
