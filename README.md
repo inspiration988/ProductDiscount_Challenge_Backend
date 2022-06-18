@@ -23,7 +23,7 @@
 
 Clone from https://github.com/inspiration988/ProductDiscount_Challenge_Backend.git
 
-`git clone https://github.com/love4php/Challenge_Backend-Engineer.git .`
+`git clone https://github.com/inspiration988/ProductDiscount_Challenge_Backend.git .`
 
 Run composer install
 
