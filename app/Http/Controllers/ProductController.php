@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Product ;
+use App\Helpers\ProductResource;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -42,17 +42,18 @@ class ProductController extends Controller
             $this->productRepository->lessThan($requestedPrice);
         }
 
-        $filters = [];
-        if(isset($request->category)){
-            $filters['category']= $request->category ;
-            $this->productRepository->equal($filters);
-
-        }
+       
 
         $page = $request->input('page',1);
         $start = ($page-1)*$this->perPage;
 
-        return Response::success('Product Lists retrieved successfully' ,Product::collection($this->productRepository->getCollection()->skip($start)->take($this->perPage)) );
+        // $x = $this->productRepository->getCollection()->skip($start)->take($this->perPage);
+        // dd($x);
+    return Response::success('Product Lists retrieved successfully' ,ProductResource::collection(
+        $this->productRepository
+        ->getCollection()
+        ->skip($start)
+        ->take($this->perPage)) );
 
     }
 

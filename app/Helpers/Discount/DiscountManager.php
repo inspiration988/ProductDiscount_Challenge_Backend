@@ -2,18 +2,19 @@
 namespace App\Helpers\Discount ;
 
 use App\Helpers\Discount\Rule\DiscountCategory;
+use App\Helpers\Product;
+use App\Helpers\ProductResource;
 
 class DiscountManager {
 
-    const Defualt_Currency = "EUR";
-
-    public $product;
+    
+    protected ProductResource|Product $product;
    
 
     protected array $_rules = [];
 
-    protected $_finalPrice = null;
-    protected $_maxPercent = null;
+    protected ?float $_finalPrice = null;
+    protected ?float $_maxPercent = null;
 
 
     /**
@@ -21,7 +22,9 @@ class DiscountManager {
      */
     public function __construct($product)
     {
+     
        $this->product = $product;
+      
     }
 
     /**
@@ -51,7 +54,8 @@ class DiscountManager {
         // Prevent Multi calculate
 
         if($this->_finalPrice == null){
-            $this->_finalPrice = $this->product['price'];
+            
+            $this->_finalPrice = $this->product->getPrice()->getAmount();
 
             if(count($this->_rules)){
                 $this->_maxPercent = 0.0;
@@ -60,12 +64,9 @@ class DiscountManager {
                      * @var $rule DiscountCategory
                      */
                     $ruleClass = new $rule($this->product);
-                    if($ruleClass->match()){
-
-                        if( $this->_maxPercent < $ruleClass->getPercent()){
+                    if(($ruleClass->match()) &&  ($this->_maxPercent < $ruleClass->getPercent())){
                             $this->_finalPrice = $ruleClass->apply();
-                            $this->_maxPercent = $ruleClass->getPercent();
-                        }
+                            $this->_maxPercent = $ruleClass->getPercent();   
                     }
                 }
             }

@@ -15,7 +15,7 @@ class DiscountSku extends DiscountAbstract implements DiscountInterface {
      */
     public function match(): bool
     {
-        return (bool) ($this->product['sku'] === $this->discountSku);
+        return (bool) ($this->product->getAttribute('sku') === $this->discountSku);
     }
 
     /**
@@ -23,7 +23,7 @@ class DiscountSku extends DiscountAbstract implements DiscountInterface {
      */
     public function apply(): float
     {
-        return (float) $this->product['price'] - (($this->discountPercent * $this->product['price']) / 100) ;
+        return (float) $this->product->getPrice()->getAmount() - (($this->product->getPrice()->getAmount()) / 100) ;
     }
 }
 

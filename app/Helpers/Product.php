@@ -2,42 +2,38 @@
 
 namespace App\Helpers;
 
-use App\Helpers\Discount\DiscountManager;
-use App\Helpers\Discount\Rule\DiscountCategory;
-use App\Helpers\Discount\Rule\DiscountSku;
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class Product extends JsonResource
+class Product
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
+
+    protected $property;
+    protected $price;
+
+    public function __construct(array $property)
     {
-
-        $discountManager = new DiscountManager($this);
-        $discountManager->addRule([
-            DiscountCategory::class ,
-            DiscountSku::class
-        ]);
-
-
-        return [
-            'sku' => $this['sku'],
-            'category' => $this['category'],
-            'name' => $this['name'],
-            'price' => [
-                'original' => $this['price'] ,
-                'final' => $discountManager->getFinalPrice() ,
-                'discount_percentage' => $discountManager->getMaxPercent() ,
-                'currency' => DiscountManager::Defualt_Currency
-            ]
-
-        ];
+        $this->property = $property;
     }
 
+    public function getPrice()
+    {
+        if (is_null($this->price)) {
+            $this->price = new Price($this->property['price'], $this->property['currency'] ?? Currency::getDefaultCurrency());
+        }
+        return $this->price;
+    }
 
+    public function setPrice()
+    {
+        /**
+          @todo
+         */
+    }
+
+    public function getAttribute($name){
+        return $this->property[$name]?? null ;
+        
+    }
+
+    public function getAttributes(){
+        return $this->property;
+    }
 }

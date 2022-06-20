@@ -1,8 +1,10 @@
 <?php
 namespace App\Helpers\Discount;
 
-use App\Helpers\Product;
+
+use App\Helpers\ProductResource;
 use phpDocumentor\Reflection\Types\Boolean;
+use App\Helpers\Product;
 
 abstract  class DiscountAbstract {
 
@@ -12,7 +14,7 @@ abstract  class DiscountAbstract {
     /**
      * @param Product $product
      */
-    public function __construct(Product $product){
+    public function __construct(ProductResource|Product $product){
         $this->product = $product;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Helpers\Product;
 
 /**
  * Class ProductRepository
@@ -18,7 +19,12 @@ class ProductRepository
     public function __construct()
     {
         $jsonData =  json_decode(file_get_contents(storage_path() . "/product.json"), true);
-        $this->collection = collect($jsonData['products']);
+        $this->collection = collect();
+        foreach($jsonData['products'] as $productDetail){
+                $product = new Product($productDetail);
+                $this->collection->push($product);
+        }
+       
 
     }
 
@@ -32,33 +38,21 @@ class ProductRepository
 
         $this->collection = $this->collection->filter(function ($item ) use ($requestedPrice) {
 
-            return ( $item['price'] < (int)$requestedPrice);
+            return ( $item->getPrice()->getAmount() < (int)$requestedPrice);
         });
 
         return $this;
     }
 
-    /**
-     * filter products equal to custom filed
-     * @param array $filters
-     * @return $this
-     */
-    public function equal(array $filters = [])
-    {
 
-       if(!empty($filters)){
-           foreach($filters as $key=>$value){
-            $this->collection = $this->collection->where($key , $value);
-           }
-       }
-
-        return $this ;
-    }
 
     /**
      * @return \Illuminate\Support\Collection
      */
     public function getCollection(){
+       
         return $this->collection;
     }
+
+
 }

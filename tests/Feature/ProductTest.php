@@ -32,28 +32,6 @@ class ProductTest extends TestCase
     }
 
 
-    /**
-     *  test user gets a detailed receipt given correct input.
-     *
-     * @return void
-     */
-    public function test_correct_category_filter()
-    {
-        $selectedCategory = "boots";
-        $response = $this->get('/api/v1/product/index?category='.$selectedCategory);
-        $data = json_decode($response->getContent(), true);
-        $data  = array_map(function($product){
-            return $product['category'];
-        }, $data['data']);
-
-        $data = array_unique($data);
-        $this->assertEqualsCanonicalizing(
-            $data,
-            [
-                $selectedCategory
-            ]
-        );
-    }
 
     public function test_return_five_result(){
         $response = $this->get('/api/v1/product/index');

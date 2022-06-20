@@ -15,7 +15,7 @@ class DiscountCategory extends DiscountAbstract implements DiscountInterface {
      */
     public function match(): bool
     {
-        return (bool) ($this->product['category'] === $this->discountCategory);
+        return (bool) ($this->product->getAttribute('category') === $this->discountCategory);
     }
 
 
@@ -24,7 +24,7 @@ class DiscountCategory extends DiscountAbstract implements DiscountInterface {
      */
     public function apply(): float
     {
-        return (float) $this->product['price'] - (($this->discountPercent * $this->product['price']) / 100) ;
+        return (float) $this->product->getPrice()->getAmount() - (($this->discountPercent * $this->product->getPrice()->getAmount()) / 100) ;
     }
 }
 
